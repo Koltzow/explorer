@@ -1,0 +1,33 @@
+var Shield = {
+	percent: 1,
+	target: 1,
+	x: 20,
+	y: 270,
+	icon: new Image()
+};
+
+Horizon.ui = Horizon.ui || {};
+Horizon.ui.shield = Shield;
+
+Shield.icon.src = 'images/tilesheets/ui/ui.png';
+
+Shield.update = function () {
+
+	this.percent += (this.target - this.percent) * 0.1;
+	
+};
+
+Shield.render = function () {
+
+	Engine.ctx.drawImage(this.icon, 0, 24, 24, 24, this.x, this.y, 24, 24);
+	
+	Engine.ctx.fillStyle = '#000';
+	Engine.ctx.fillRect(this.x+24+9, this.y + 8, 102, 8);
+	
+	Engine.ctx.fillStyle = '#444';
+	Engine.ctx.fillRect(this.x+24+10, this.y + 9, 100, 6);
+		
+	Engine.ctx.fillStyle = '#ffe461';
+	Engine.ctx.fillRect(this.x + 24 + 10, this.y + 9, this.percent * 100, 6);
+
+};

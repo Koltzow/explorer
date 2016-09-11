@@ -1,0 +1,1 @@
+String.prototype.getHashCode=function(){var t=0;if(0==this.length)return t;for(var r=0;r<this.length;r++)t=this.charCodeAt(r)+((t<<5)-t),t&=t;return t};

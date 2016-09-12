@@ -20,9 +20,10 @@
 
 	<!-- JAVASCRIPTS -->
 	<script src="js/lib/horizon.js" type="text/javascript"></script>
+	<script src="js/lib/sound.js" type="text/javascript"></script>
+	<script src="js/lib/effects/smoke.js" type="text/javascript"></script>
 	<script src="js/lib/util/string.js" type="text/javascript"></script>
 	<script src="js/lib/util/number.js" type="text/javascript"></script>
-<!--	<script src="js/lib/util/rotatedevice.js" type="text/javascript"></script>-->
 	<script src="js/lib/util/seed.js" type="text/javascript"></script>
 	<script src="js/lib/util/keyboard.js" type="text/javascript"></script>
 	<script src="js/lib/util/touch.js" type="text/javascript"></script>

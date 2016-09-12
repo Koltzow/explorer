@@ -4,7 +4,7 @@ var JetfuelBar = {
 	cooldown: 0,
 	cooldownStart: 30*5,
 	x: 20,
-	y: 248,
+	y: 315-24-24,
 	icon: new Image()
 };
 
@@ -27,6 +27,7 @@ JetfuelBar.update = function () {
 	this.target = (this.target > 1)?1:this.target;
 	
 	if(this.target <= 0 && this.cooldown === 0){
+		Sound.play('jpempty');
 		this.cooldown = this.cooldownStart;
 	}
 	

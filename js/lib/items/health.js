@@ -55,6 +55,9 @@ Health.create = function(params) {
 	item.activate = function (obj) {
 		
 		if(obj.health !== undefined && this.active){
+		
+			Sound.play('health');
+		
 			this.active = false;
 			this.currentAnimation = this.animations.open;
 			obj.health += this.boost;

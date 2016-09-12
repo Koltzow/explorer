@@ -2,7 +2,7 @@ var Shield = {
 	percent: 1,
 	target: 1,
 	x: 20,
-	y: 270,
+	y: 315-24,
 	icon: new Image()
 };
 

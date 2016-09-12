@@ -2,7 +2,7 @@ var HealthBar = {
 	percent: 1,
 	target: 1,
 	x: 20,
-	y: 290,
+	y: 315,
 	icon: new Image()
 };
 

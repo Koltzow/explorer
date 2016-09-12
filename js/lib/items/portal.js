@@ -46,6 +46,9 @@ Portal.create = function(params) {
 	portal.activate = function (obj) {
 		
 		if(this.active){
+		
+			Sound.play('portal');
+		
 			this.active = false;
 			Planet.create();
 		}

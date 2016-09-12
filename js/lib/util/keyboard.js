@@ -1,6 +1,10 @@
 var Keyboard = {
     
-    pressedKeys: []
+    pressedKeys: [],
+    dir: {
+    	x: 0,
+    	y: 0
+    }
 
 };
 
@@ -10,12 +14,29 @@ Keyboard.keydown = function(e) {
 	this.pressedKeys[e.key] = true;
 	this.pressedKeys[e.code] = true;
 	this.pressedKeys[e.keyCode] = true;
+	
+	this.dir.x = 0;
+	this.dir.y = 0;
+	
+	if(this.isPressed('w') || this.isPressed('ArrowUp')){ this.dir.y -= 1; } 
+	if(this.isPressed('s') || this.isPressed('ArrowDown')){ this.dir.y += 1; }
+	if(this.isPressed('a') || this.isPressed('ArrowLeft')){ this.dir.x -= 1; }
+	if(this.isPressed('d') || this.isPressed('ArrowRight')){ this.dir.x += 1; }
+	
 };
 
 Keyboard.keyup = function(e) {
 	this.pressedKeys[e.key] = false;
 	this.pressedKeys[e.code] = false;
 	this.pressedKeys[e.keyCode] = false;
+	
+	this.dir.x = 0;
+	this.dir.y = 0;
+	
+	if(this.isPressed('w') || this.isPressed('ArrowUp')){ this.dir.y -= 1; } 
+	if(this.isPressed('s') || this.isPressed('ArrowDown')){ this.dir.y += 1; }
+	if(this.isPressed('a') || this.isPressed('ArrowLeft')){ this.dir.x -= 1; }
+	if(this.isPressed('d') || this.isPressed('ArrowRight')){ this.dir.x += 1; }
 };
    
 Keyboard.isPressed = function(key){

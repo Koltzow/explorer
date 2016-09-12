@@ -14,7 +14,10 @@ Horizon.gamepad = GamePad;
 
 GamePad.update = function () {
 
+	this.dir.x = 0;
+
 	if(navigator.getGamepads()[0]) {
+		
 	    this.connected = true;
 	    this.buttons = navigator.getGamepads()[0].buttons;
 	    this.sticks = navigator.getGamepads()[0].axes;
@@ -25,28 +28,28 @@ GamePad.update = function () {
 	    }
 	    
 	    if(this.buttons[9].pressed) {
-	    	if(Engine.stopped){
-	    		Engine.run();
-	    	} else {
+	    	if(!Engine.stopped){
 	    		Engine.stop();
 	    	}
 	    }
+	    
+	} else {
+		this.disconnect();
 	}
 
 };
 
 GamePad.connect = function () {
 
-	console.log('gamepad connected');
+	console.log('GAMEPAD: Connected');
 	
 	this.connected = true;
-	this.interval = window.setInterval(this.update.bind(this), 1000/Engine.fps);
 
 };
 
 GamePad.disconnect = function () {
 
-	console.log('gamepad disconnected');
+	console.log('GAMEPAD: Disconnected');
 	
 	this.connected = false;
 	this.buttons = [];

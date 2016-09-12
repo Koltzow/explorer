@@ -1,58 +1,6 @@
 var Player = {};
-var Smoke = {
-	particles: [],
-	l: 30,
-	s: 3,
-	c: ['rgba(0,0,0,0.5)']
-};
 
 Horizon.player = Player;
-	
-Smoke.add = function (x, y) {
-
-	var d = Math.random()*2*Math.PI;
-	var s = Math.random()*this.s;
-	var l = this.l;
-		
-	this.particles.push({
-		x  : x,
-		y  : y,
-		l  : l,
-		r  : s,
-		c  : this.c[Math.floor(Math.random() * this.c.length)]
-	});
-		
-};
-	
-Smoke.update = function () {
-
-	for (var i = 0; i < this.particles.length; i++) {
-	
-	    this.particles[i].l--;
-	    this.particles[i].r += Math.random();
-	    this.particles[i].y += 0.5;
-	    this.particles[i].c = 'rgba(255, 255, 255, '+(1/this.l * this.particles[i].l)+')';
-	    
-	    if(this.particles[i].l < 0){
-	    	this.particles.splice(i, 1);
-	    }
-	    
-	}
-	
-}
-	
-Smoke.draw = function () {
-
-	if(this.particles.length < 1) return false;
-			
-	for(var i = 0; i < this.particles.length; i++) {
-		        
-		Engine.ctx.fillStyle = this.particles[i].c;
-		Engine.ctx.fillRect( this.particles[i].x + Engine.width/2 - Camera.x- this.particles[i].r/2, this.particles[i].y + Engine.height/2 - Camera.y - this.particles[i].r/2, this.particles[i].r, this.particles[i].r);
-	        
-	}
-	
-};
 
 Player.create = function(params) {
 
@@ -73,7 +21,7 @@ Player.create = function(params) {
 	char.speed = 5;
 	char.width = params.width || 32;
 	char.height = params.height || 32;
-	char.dir = [0,1];
+	char.dir = {x:0, y:0};
 	char.history = [];
 	char.maxHistory = 20;
 	char.step = false;
@@ -119,22 +67,16 @@ Player.create = function(params) {
 			var dir = {x:0, y:0};
 			var altSpeed = false;
 		
-			//test buttons
-			if(Keyboard.isPressed('w') || Keyboard.isPressed('ArrowUp')){ dir.y -= 1; } 
-			if(Keyboard.isPressed('s') || Keyboard.isPressed('ArrowDown')){ dir.y += 1; }
-			if(Keyboard.isPressed('a') || Keyboard.isPressed('ArrowLeft')){ dir.x -= 1; }
-			if(Keyboard.isPressed('d') || Keyboard.isPressed('ArrowRight')){ dir.x += 1; }
-			
-			if(Touch.enabled){
-				dir = Touch.dir;
-			}
-			
 			if(GamePad.connected){
 				dir = GamePad.dir;
+			} else if(Touch.enabled){
+				dir = Touch.dir;
+			} else {
+				dir = Keyboard.dir;
 			}
 			
 			if(dir.x !== 0 || dir.y !== 0){
-			
+						
 				this.walking = true;
 				
 				//walking
@@ -159,12 +101,17 @@ Player.create = function(params) {
 					altSpeed = 3;
 				}
 				
-				this.dir = dir;
+				this.dir.x = dir.x;
+				this.dir.y = dir.y;
 				
-				this.x += this.dir.x * (altSpeed || this.speed) ;
+				this.x += this.dir.x * (altSpeed || this.speed);
 				this.y += this.dir.y * (altSpeed || this.speed);
 				
+				//console.log('walking:', this.dir);
+				
 			} else {
+			
+				//console.log('standing:', this.dir);
 							
 				//standing
 				if(this.dir.y > 0){ this.currentAnimation = this.animations.idle.down } else 
@@ -173,22 +120,29 @@ Player.create = function(params) {
 					this.currentAnimation = this.animations.idle.left;
 				}
 				
-			}
-			
+			}			
 			
 			
 		}
-		
-		//console.log(GamePad);
-		
+				
 		if(Keyboard.isPressed('Space') || (GamePad.connected && GamePad.buttons.length > 0 && GamePad.buttons[0].pressed)){ 
 		
 			if(JetfuelBar.target > 0){
+			
+				if(!this.flying){
+					Sound.play('jpstart');
+					Sound.play('jpboost', {loop: -1});
+				}
+			
 				this.vz -= 1.5;
 				this.flying = true;
 				JetfuelBar.target -= 0.005;
 				Smoke.add(this.x, this.y-this.z+10);
+			} else {
+				Sound.stop('jpboost');
 			}
+		} else {
+			Sound.stop('jpboost');
 		}
 		
 		
@@ -201,8 +155,8 @@ Player.create = function(params) {
 			this.flying = false;
 			this.z = 0;
 			this.vz = 0;
-		} else if (this.z > 80) {
-			this.z = 80;
+		} else if (this.z > 100) {
+			this.z = 100;
 			this.vz = 0;
 		}
 		
@@ -257,9 +211,7 @@ Player.create = function(params) {
 			this.step = !this.step;
 		}
 		
-		if(this.flying){
-			Engine.ctx.drawImage(this.shadow, 0, 0, 32, 32, Math.round(this.x + Engine.width/2 - this.width/2 - Camera.x), Math.round(this.y + Engine.height/2 - this.height/2 - Camera.y), 32, 32);	
-		}
+		Engine.ctx.drawImage(this.shadow, 0, 0, 32, 5, Math.round(this.x + Engine.width/2 - this.width/2 - Camera.x), Math.round(this.y+29 + Engine.height/2 - this.height/2 - Camera.y), 32, 5);	
 		
 		Smoke.draw();
 	

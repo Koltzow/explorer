@@ -111,7 +111,9 @@ Engine.update = function () {
 	JetfuelBar.update();
 	
 	if(Camera.target !== undefined) Camera.update();
-				
+	
+	if(GamePad.connected) GamePad.update();
+					
 };
 
 Engine.render = function () {
@@ -175,8 +177,8 @@ Engine.loop = function () {
 	if (this.delta > this.interval) {
 	        
 		this.then = this.now - (this.delta % this.interval);
-	    this.update();
-	    this.render();
+	    if(!this.stopped)this.update();
+	    if(!this.stopped)this.render();
 	
 	}
 
@@ -184,9 +186,7 @@ Engine.loop = function () {
 
 Engine.run = function () {
 
-	var _this = this;
-	
-	console.log('RUN');
+	console.log('ENGINE: Run');
 	
 	if(this.stopped){
 	
@@ -201,7 +201,9 @@ Engine.stop = function () {
 
 	if(!this.stopped){
 	
-		console.log('STOP');
+		console.log('ENGINE: Stop');
+		
+		Sound.play('menu');
 
 		window.cancelAnimationFrame(this.mainloop);
 		

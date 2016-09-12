@@ -1,6 +1,7 @@
 var Touch = {
     
     supported: false,
+    enabled: false,
     radius: 10,
     threshold: 20,
     pos: {
@@ -20,6 +21,10 @@ var Touch = {
 Horizon.touch = Touch;
 
 Touch.start = function(e) {
+
+	if(!this.enabled){
+		this.enabled = true;
+	}
 
 	for (var i = 0; i < e.touches.length; i++) {
 		

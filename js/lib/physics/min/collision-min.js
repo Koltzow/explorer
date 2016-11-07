@@ -1,1 +1,1 @@
-var Collision={};Horizon.physics=Horizon.physics||{},Horizon.physics.collision=Collision,Collision.test=function(i,o){return i.x+i.width>o.x&&i.x<o.x+o.width&&i.y+i.height>o.y&&i.y<o.y+o.height};
+define(function(){var i={};return i.test=function(i,l){var e=i.x,t=i.y,d=i.width,o=i.height,r=l.x,c=l.y,h=l.width,n=l.height;return void 0!==i.collider&&(e+=i.collider.left,t+=i.collider.top,d=i.collider.width,o=i.collider.height),void 0!==l.collider&&(r+=l.collider.left,c+=l.collider.top,h=l.collider.width,n=l.collider.height),e+d>r&&e<r+h&&t+o>c&&t<c+n},i});

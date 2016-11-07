@@ -1,35 +1,14 @@
-var Seed = {};
+define(function () {
 
-Horizon.util = Horizon.util || {};
-Horizon.util.seed = Seed;
-
-Seed.create = function () {
-
-	var seed = Math.random().toString(36).substring(7);	
-	return seed;
-	
-};
-
-String.prototype.color = function (seed) {
-
-	
-	var hash = this.getHashCode();
-	var color = hash.intToHSL();
+	var Seed = {};
 		
-	return color;
+	Seed.create = function () {
+	
+		var seed = Math.random().toString(36).substring(7);	
+		return seed;
+		
+	};
+	
+	return Seed;
 
-};
-
-String.prototype.randomBetween = function(min, max) {
-
-	var hash = this.getHashCode();
-	    
-    min = min || 0;
-    max = max || 1;
-    
-    var seed = (hash * 9301 + 49297) % 233280;
-    var rnd = Math.abs(seed / 233280.0);
-        
-    return min + rnd * (max - min);
-    
-};
+});

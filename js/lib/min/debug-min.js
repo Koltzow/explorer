@@ -1,0 +1,1 @@
+define(function(){var e={showCollider:!1};return e});

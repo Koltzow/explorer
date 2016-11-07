@@ -1,31 +1,35 @@
-var Camera = {
-	x: 0,
-	y: 0,
-	target: null
-};
+define(function () {
 
-Horizon.camera = Camera;
-
-Camera.update = function () {
-
-	if(this.target !== null){
-		this.x -= (this.x - this.target.x) * 0.1;
-		this.y -= (this.y - this.target.y) * 0.1;
+	var Camera = {
+		x: 0,
+		y: 0,
+		target: null
+	};
+	
+	Camera.update = function () {
+	
+		if(this.target !== null){
+			this.x -= (this.x - this.target.x) * 0.1;
+			this.y -= (this.y - this.target.y) * 0.1;
+			
+			this.x = Math.round(this.x);
+			this.y = Math.round(this.y);
+		}
+	
+	};
+	
+	Camera.follow = function (obj) {
+	
+		if(obj !== undefined && typeof obj === 'object') this.target = obj;
 		
-		this.x = Math.round(this.x);
-		this.y = Math.round(this.y);
-	}
-
-};
-
-Camera.follow = function (obj) {
-
-	if(obj !== undefined && typeof obj === 'object') this.target = obj;
+	};
 	
-};
-
-Camera.unfollow = function () {
+	Camera.unfollow = function () {
+		
+		this.target = null;
+		
+	};
 	
-	this.target = null;
+	return Camera;
 	
-};
+});

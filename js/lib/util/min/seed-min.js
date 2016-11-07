@@ -1,1 +1,1 @@
-var Seed={};Horizon.util=Horizon.util||{},Horizon.util.seed=Seed,Seed.create=function(){var t=Math.random().toString(36).substring(7);return t},String.prototype.color=function(t){var r=this.getHashCode(),e=r.intToHSL();return e},String.prototype.randomBetween=function(t,r){var e=this.getHashCode();t=t||0,r=r||1;var o=(9301*e+49297)%233280,n=Math.abs(o/233280);return t+n*(r-t)};
+define(function(){var n={};return n.create=function(){var n=Math.random().toString(36).substring(7);return n},n});

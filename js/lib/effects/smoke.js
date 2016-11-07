@@ -1,3 +1,5 @@
+define(function () {
+
 var Smoke = {
 	particles: [],
 	l: 30,
@@ -38,15 +40,19 @@ Smoke.update = function () {
 	
 }
 	
-Smoke.draw = function () {
+Smoke.render = function () {
 
 	if(this.particles.length < 1) return false;
 			
 	for(var i = 0; i < this.particles.length; i++) {
 		        
-		Engine.ctx.fillStyle = this.particles[i].c;
-		Engine.ctx.fillRect( this.particles[i].x + Engine.width/2 - Camera.x- this.particles[i].r/2, this.particles[i].y + Engine.height/2 - Camera.y - this.particles[i].r/2, this.particles[i].r, this.particles[i].r);
+		EXP.engine.ctx.fillStyle = this.particles[i].c;
+		EXP.engine.ctx.fillRect( this.particles[i].x + EXP.engine.width/2 - EXP.camera.x- this.particles[i].r/2, this.particles[i].y + EXP.engine.height/2 - EXP.camera.y - this.particles[i].r/2, this.particles[i].r, this.particles[i].r);
 	        
 	}
 	
 };
+
+return Smoke;
+
+});

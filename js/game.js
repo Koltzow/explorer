@@ -17,12 +17,13 @@
         
     Game.init = function() {
                 
-        Planet.create();
-        console.log(Planet);	
-        	
+    
         Engine.create({
         	camera: Camera
         });
+        
+        Planet.create();
+        console.log(Planet);	
         
         var player = Player.create({controllable: true});
         Engine.add(player);

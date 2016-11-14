@@ -1,9 +1,8 @@
-define([
-], function () {
+define(function () {
 
-	var Items = {};
+	var Gold = {};
 	
-	Items.create = function (params) {
+	Gold.create = function(params) {
 		
 		params = params || {};
 		
@@ -11,26 +10,25 @@ define([
 		
 		item.x = params.x || 0;
 		item.y = params.y || 0;
-		item.label = params.label || 'dummy';
+		item.label = 'gold';
 		item.type = 'item';
 		item.width = EXP.engine.TILESIZE;
 		item.height = EXP.engine.TILESIZE;
-		item.hidden = params.hidden || false;
-		item.disabled = params.disabled || false;
-		item.collectable = params.collectable || true;
-		item.isTrigger = params.isTrigger || false;
+		item.hidden = false;
+		item.disabled = false;
+		item.collectable = true;
+		item.isTrigger = false;
 		item.collided = false;
 		item.colliding = false;
-		item.collider = params.collider || {
+		item.collider = {
 			width: 18,
 			height: 4,
 			left: 7,
 			top: 18
 		};
-		item.tilesheetSrc = params.tilesheetSrc || 'images/tilesheets/items/rock.png';
 		item.tilesheet = new Image();
-		item.tilesheet.src = item.tilesheetSrc;
-		item.animations = params.animations || {
+		item.tilesheet.src = 'images/tilesheets/items/gold.png';
+		item.animations = {
 			active: {
 				x: 0,
 				y: 0,
@@ -77,7 +75,7 @@ define([
 				}
 		};
 		
-		item.onCollisionEnter = params.onCollisionEnter || function (obj) {
+		item.onCollisionEnter = function (obj) {
 		
 			if(!this.collided){
 				console.log('picked up '+ this.label);
@@ -96,16 +94,16 @@ define([
 			
 		};
 		
-		item.onCollisionExit = params.onCollisionExit || function (obj) {
+		item.onCollisionExit = function (obj) {
 			this.colliding = false;
 		};
 		
-		item.onCollisionStay = params.onCollisionStay || function (obj) {};
+		item.onCollisionStay = function (obj) {};
 		
 		return item;
 		
-	}
-		
-	return Items;
-    
+	};
+	
+	return Gold;
+	
 });

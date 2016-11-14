@@ -28,9 +28,9 @@ define(function () {
 		    }
 		    
 		    if(this.buttons[9].pressed) {
-		    	if(!Engine.stopped){
-		    		Engine.stop();
-		    	}
+		    	if(!EXP.engine.stopped){
+		    		EXP.engine.stop();
+		    	} 
 		    }
 		    
 		} else {

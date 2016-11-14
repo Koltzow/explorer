@@ -6,7 +6,7 @@ define(function () {
 		cooldown: 0,
 		cooldownStart: 30*5,
 		x: 20,
-		y: 315-24-24,
+		y: 24,
 		icon: new Image()
 	};
 	
@@ -38,17 +38,17 @@ define(function () {
 	
 	JetfuelBar.render = function () {
 	
-		EXP.engine.ctx.drawImage(this.icon, 0, 72, 24, 24, this.x, this.y, 24, 24);
+		EXP.engine.ctx.drawImage(this.icon, 0, 24*3, 24, 24, this.x, this.y, 24, 24);
 		
-		EXP.engine.ctx.fillStyle = '#000';
-		EXP.engine.ctx.fillRect(this.x+24+9, this.y + 8, 102, 8);
+		EXP.engine.ctx.fillStyle = 'rgba(0,0,0,0.5)';
+		EXP.engine.ctx.fillRect(this.x+20, this.y + 4, 103, 16);
 		
-		EXP.engine.ctx.fillStyle = '#444';
-		EXP.engine.ctx.fillRect(this.x+24+10, this.y + 9, 100, 6);
+		EXP.engine.ctx.fillStyle = 'rgba(255,255,255,0.3)';
+		EXP.engine.ctx.fillRect(this.x+20, this.y + 8, 100, 8);
 			
-		EXP.engine.ctx.fillStyle = '#ccc';
-		EXP.engine.ctx.fillRect(this.x + 24 + 10, this.y + 9, Math.round(this.percent * 100), 6);
-	
+		EXP.engine.ctx.fillStyle = '#00beff';
+		EXP.engine.ctx.fillRect(this.x + 20, this.y + 8, Math.floor(this.percent * 100), 8);
+		
 	};
 	
 	return JetfuelBar;

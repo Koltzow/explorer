@@ -9,7 +9,8 @@ define(function () {
 		var char = {};
 		
 		char.controllable = params.controllable || false;
-		char.id = 'player';
+		char.type = 'player';
+		char.label = 'astronaut';
 		char.x = params.x || 0;
 		char.y = params.y || 0;
 		char.z = params.z || 0;
@@ -18,7 +19,8 @@ define(function () {
 		char.maxShield = 100;
 		char.health = 50;
 		char.maxHealth = 100;
-		char.speed = 5;
+		char.speed = 7;
+		char.diagonalSpeed = 4;
 		char.width = params.width || 32;
 		char.height = params.height || 32;
 		char.collider = {
@@ -28,6 +30,8 @@ define(function () {
 			top: 25
 		};
 		char.dir = {x:0, y:0};
+		char.inventoryLimit = 6;
+		char.inventory = [];
 		char.history = [];
 		char.maxHistory = 20;
 		char.step = false;
@@ -63,6 +67,8 @@ define(function () {
 		char.currentAnimation = char.animations.idle.down;
 		char.currentAnimationFrame = 0;
 		
+		EXP.ui.inventorybar.targetInventory = char.inventory;
+		
 		char.update = function () {
 				
 			if(this.controllable){
@@ -83,22 +89,22 @@ define(function () {
 					if(dir.x > 0 && dir.y == 0){ this.currentAnimation = this.animations.walking.right; } else 
 					if(dir.x > 0 && dir.y > 0) { 
 						this.currentAnimation = this.animations.walking.downright; 
-						altSpeed = 3;
+						altSpeed = this.diagonalSpeed;
 					} else
 					if(dir.x == 0 && dir.y > 0){ this.currentAnimation = this.animations.walking.down; } else
 					if(dir.x < 0 && dir.y > 0) { 
 						this.currentAnimation = this.animations.walking.downleft;
-						altSpeed = 3;
+						altSpeed = this.diagonalSpeed;
 					} else
 					if(dir.x < 0 && dir.y == 0){ this.currentAnimation = this.animations.walking.left; } else
 					if(dir.x < 0 && dir.y < 0) { 
 						this.currentAnimation = this.animations.walking.upleft;
-						altSpeed = 3;	
+						altSpeed = this.diagonalSpeed;	
 					} else
 					if(dir.x == 0 && dir.y < 0){ this.currentAnimation = this.animations.walking.up; } else 
 					if(dir.x > 0 && dir.y < 0) { 
 						this.currentAnimation = this.animations.walking.upright;
-						altSpeed = 3;
+						altSpeed = this.diagonalSpeed;
 					}
 					
 					this.dir.x = dir.x;
@@ -129,7 +135,7 @@ define(function () {
 				if(EXP.ui.jetfuelbar.target > 0){
 				
 					if(!this.flying){
-						EXP.sound.play('jpstart');
+						EXP.sound.play('jpstart', {volume: 0.5});
 						EXP.sound.play('jpboost', {loop: -1});
 						
 						EXP.sound.stop('footsteps');
@@ -145,7 +151,7 @@ define(function () {
 					EXP.sound.stop('jpstart');
 					
 					if(this.flying) {
-						EXP.sound.play('jpland');
+						EXP.sound.play('jpland', {volume: 0.5});
 						
 						//standing
 						if(this.dir.y > 0){ this.currentAnimation = this.animations.idle.down } else 
@@ -164,7 +170,7 @@ define(function () {
 				EXP.sound.stop('jpstart');
 				
 				if(this.flying){
-					EXP.sound.play('jpland');
+					EXP.sound.play('jpland', {volume: 0.5});
 					
 					//standing
 					if(this.dir.y > 0){ this.currentAnimation = this.animations.idle.down } else 
@@ -206,12 +212,21 @@ define(function () {
 			var colliding = false;
 			
 			for (var i = 0; i < EXP.engine.bodies.length; i++) {
-				if(EXP.engine.bodies[i] === this) { continue; }
+				if(EXP.engine.bodies[i] === this || EXP.engine.bodies[i].disabled) { continue; }
 				//check collition
-				if(EXP.physics.collision.test(this, EXP.engine.bodies[i]) && this.z < 32){
-					if(EXP.engine.bodies[i].activate !== undefined) { EXP.engine.bodies[i].activate(this); }
+				if(EXP.physics.collision.test(this, EXP.engine.bodies[i]) && this.z < EXP.engine.TILESIZE){
+					
+					if(EXP.engine.bodies[i].onCollisionEnter !== undefined && !EXP.engine.bodies[i].colliding) { 
+						EXP.engine.bodies[i].onCollisionEnter(this); 
+					}
+					
+					if(EXP.engine.bodies[i].onCollisionStay !== undefined) { EXP.engine.bodies[i].onCollisionStay(this); }
+					
+					if(EXP.engine.bodies[i].isTrigger !== undefined && EXP.engine.bodies[i].isTrigger) continue;
 					
 					colliding = true;
+				} else {
+					if(EXP.engine.bodies[i].onCollisionExit !== undefined && EXP.engine.bodies[i].colliding){EXP.engine.bodies[i].onCollisionExit(this)}
 				}
 			}
 			
@@ -222,13 +237,19 @@ define(function () {
 			
 			var x = this.x;
 			var y = this.y;
-					
-			if(this.history[0] !== ''+x+':'+y+'' && this.walking){
-				this.history.unshift(x+':'+y);
-				if(this.maxHistory < this.history.length ){
-					this.history.pop();
-				}
+			
+			if(this.walking){
+				EXP.effects.dust.add(x, y+16);
 			}
+					
+//			if(this.history[0] !== ''+x+':'+y+'' && this.walking){
+//			
+//				EXP.effects.dust.add(x, y+16);
+//				this.history.unshift(x+':'+y);
+//				if(this.maxHistory < this.history.length ){
+//					this.history.pop();
+//				}
+//			}
 			
 			EXP.ui.healthbar.target = this.health / this.maxHealth;
 			EXP.ui.shieldbar.target = this.shield / this.maxShield;
@@ -237,15 +258,15 @@ define(function () {
 		
 		char.render = function () {
 		
-			for (var i = 1; i < this.history.length; i++) {
-				
-				var coord = this.history[i].split(':');
-				var x = Math.round(parseFloat(coord[0]));
-				var y = Math.round(parseFloat(coord[1]));
-							
-				EXP.engine.ctx.drawImage(this.footsteps, (i+this.step)*32, 0, 32, 32, x + EXP.engine.width/2 - 32/2 - EXP.camera.x, y + EXP.engine.height/2 - 32/2 - EXP.camera.y, this.width, this.height);
-				
-			}
+//			for (var i = 1; i < this.history.length; i++) {
+//				
+//				var coord = this.history[i].split(':');
+//				var x = Math.round(parseFloat(coord[0]));
+//				var y = Math.round(parseFloat(coord[1]));
+//							
+//				EXP.engine.ctx.drawImage(this.footsteps, (i+this.step)*32, 0, 32, 32, x + EXP.engine.width/2 - 32/2 - EXP.camera.x, y + EXP.engine.height/2 - 32/2 - EXP.camera.y, this.width, this.height);
+//				
+//			}
 			
 			if(this.walking){
 				this.step = !this.step;
@@ -256,7 +277,7 @@ define(function () {
 		
 			EXP.engine.ctx.drawImage(this.tilesheet, (this.currentAnimation.x+Math.floor(this.currentAnimationFrame))*this.width, this.currentAnimation.y*this.height, this.width, this.height, Math.round(this.x + EXP.engine.width/2 - this.width/2 - EXP.camera.x), Math.round(this.y - this.z + EXP.engine.height/2 - this.height/2 - EXP.camera.y), this.width, this.height);
 			
-			if(EXP.debug.showCollider){
+			if(EXP.debug.colliders){
 				EXP.engine.ctx.fillStyle = 'rgba(0,255,0,0.5)';
 				EXP.engine.ctx.fillRect(
 					Math.round(this.x + this.collider.left + EXP.engine.width/2 - this.width/2 - EXP.camera.x),

@@ -6,23 +6,28 @@ define(function () {
 		
 		params = params || {};
 		
-		var portal = {};
+		var object = {};
 		
-		portal.x = params.x || 0;
-		portal.y = params.y || 0;
-		portal.label = 'portal';
-		portal.active = true;
-		portal.width = 32;
-		portal.height = 64;
-		portal.collider = {
+		object.x = params.x || 0;
+		object.y = params.y || 0;
+		object.type = 'object';
+		object.label = 'portal';
+		object.hidden = false;
+		object.disabled = false;
+		object.width = 32;
+		object.height = 64;
+		object.collided = false;
+		object.colliding = false;
+		object.collider = {
 			width: 32,
 			height: 32,
 			top: 32,
 			left: 0
 		};
-		portal.tilesheet = new Image();
-		portal.tilesheet.src = 'images/tilesheets/items/portal.png';
-		portal.animations = {
+		object.isTrigger = true;
+		object.tilesheet = new Image();
+		object.tilesheet.src = 'images/tilesheets/items/portal.png';
+		object.animations = {
 			active: {
 				x: 0,
 				y: 0,
@@ -30,10 +35,10 @@ define(function () {
 				s: 4
 			}
 		};
-		portal.currentAnimation = portal.animations.active;
-		portal.currentAnimationFrame = 0;
+		object.currentAnimation = object.animations.active;
+		object.currentAnimationFrame = 0;
 		
-		portal.update = function () {
+		object.update = function () {
 			
 			this.currentAnimationFrame += 1/this.currentAnimation.s;
 			
@@ -43,11 +48,13 @@ define(function () {
 			
 		};
 		   
-		portal.render = function(){
+		object.render = function(){
+		
+			if(this.hidden) return;
 		      		
 			EXP.engine.ctx.drawImage(this.tilesheet, (this.currentAnimation.x+Math.floor(this.currentAnimationFrame))*this.width, this.currentAnimation.y*this.height, this.width, this.height, Math.round(this.x + EXP.engine.width/2 - this.width/2 - EXP.camera.x), Math.round(this.y + EXP.engine.height/2 - this.width/2 - EXP.camera.y), this.width, this.height);
 			
-			if(EXP.debug.showCollider){
+			if(EXP.debug.colliders){
 			
 				EXP.engine.ctx.fillStyle = 'rgba(0,255,0,0.5)';
 				EXP.engine.ctx.fillRect(
@@ -59,12 +66,14 @@ define(function () {
 			}
 		};
 		
-		portal.activate = function (obj) {
+		object.onCollisionEnter = function (obj) {
+		
+			if(!this.collided){
 			
-			if(this.active){
-			
-				EXP.sound.play('portal');
+				this.hidden = true;
 				
+				EXP.sound.play('portal');
+					
 				for (var i = 0; i < 5; i++) {
 									
 					setTimeout(function () {
@@ -75,15 +84,21 @@ define(function () {
 					
 				}
 			
-				this.active = false;
-				var self = this;
-				self = undefined;
 				EXP.planet.create();
 			}
-					
+		
+			this.collided = true;
+			this.colliding = true;
+			
 		};
 		
-		return portal;
+		object.onCollisionExit = function (obj) {
+			this.colliding = false;
+		};
+		
+		object.onCollisionStay = function (obj) {};
+		
+		return object;
 		
 	};
 	

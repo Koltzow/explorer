@@ -27,6 +27,9 @@ define(function () {
 	
 		this.mainloop = null;
 		
+		//constants
+		this.TILESIZE = 32;
+		
 		this.bodies = [];
 		this.stopped = true;
 		this.fullscreen = params.fullscreen || true;
@@ -99,7 +102,7 @@ define(function () {
 	Engine.update = function () {
 	
 		this.bodies.sort(function (a, b) {
-			return a.y + a.height > b.y + b.height;
+			return a.y + a.collider.top + a.collider.height > b.y + b.collider.top + b.collider.height;
 		});
 		
 		for (var i = 0; i < this.bodies.length; i++) {
@@ -118,7 +121,8 @@ define(function () {
 	Engine.render = function () {
 	
 		this.clear();
-			
+		
+		//EXP.space.render();
 		EXP.planet.render();
 				
 		for (var i = 0; i < this.bodies.length; i++) {

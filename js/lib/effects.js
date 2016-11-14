@@ -1,12 +1,14 @@
 define([
 	'lib/effects/smoke',
-	'lib/effects/Exp'
-], function (Smoke, Exp) {
+	'lib/effects/exp',
+	'lib/effects/dust'
+], function (Smoke, Exp, Dust) {
 
 	var Effects = {
 	    
 	    smoke: Smoke,
-	    exp: Exp
+	    exp: Exp,
+	    dust: Dust
 	
 	};
 	
@@ -14,6 +16,7 @@ define([
 	
 		this.smoke.update();
 		this.exp.update();
+		this.dust.update();
 	
 	};
 	
@@ -21,6 +24,7 @@ define([
 		
 		this.smoke.render();
 		this.exp.render();
+		this.dust.render();
 		
 	};
 		

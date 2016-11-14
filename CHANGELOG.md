@@ -2,6 +2,36 @@
 
 Here is the change log for Explorer.
 
+## 0.0.3
+
+### Added
+* Functions for showing/hiding colliders in Debug class
+* Constant tilesize
+* Dust class
+* Item class for collectable items
+* Dummy item for future items
+* Collision functions for Enter, Stay and Exit
+* Type and label variables for player, items and objects
+* Inventory for player
+* InventoryBar class
+* Virtual camera position
+* Ability to set static camera position
+* Camera focus to focus on objects/items/POIs etc.
+* Data class for importing and storing datasets
+* Space class
+
+### Updated
+* Improved smoke
+* Disabled footsteps
+* Renamed Item class to Object class for static objects
+* Improved layer sorting using colliders
+* Moved item creation to Items class to avoid duplicate code
+
+
+### Fixed
+* Variable typo for colliders
+* Lack of support for capital letters on keyboard controller
+
 ## 0.0.2
 
 ### Added
@@ -15,14 +45,14 @@ Here is the change log for Explorer.
 
 ### Updated
 * Moved string prototype to String class
-* Improved tile mapping to have vegetation zones 
-* Moved controllers into Controller class to return single directional output
+* Improved tile mapping to have vegetation zones
+* Improved jetpack sounds
 * Renamed Shield class to Sheildbar
+* Moved controllers into Controller class to return single directional output
 * Moved UI into UI class
 * Moved effects into Effects class
 * Moved items into Items class
 * Moved utilities into Util class
-* Improved jetpack sounds
 
 ## 0.0.1
 

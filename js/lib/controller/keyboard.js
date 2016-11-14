@@ -18,11 +18,10 @@ define(function () {
 		this.dir.x = 0;
 		this.dir.y = 0;
 		
-		if(this.isPressed('w') || this.isPressed('ArrowUp')){ this.dir.y -= 1; } 
-		if(this.isPressed('s') || this.isPressed('ArrowDown')){ this.dir.y += 1; }
-		if(this.isPressed('a') || this.isPressed('ArrowLeft')){ this.dir.x -= 1; }
-		if(this.isPressed('d') || this.isPressed('ArrowRight')){ this.dir.x += 1; }
-		
+		if(this.isPressed('w') || this.isPressed('W') || this.isPressed('ArrowUp')){ this.dir.y -= 1; } 
+		if(this.isPressed('s') || this.isPressed('S') || this.isPressed('ArrowDown')){ this.dir.y += 1; }
+		if(this.isPressed('a') || this.isPressed('A') || this.isPressed('ArrowLeft')){ this.dir.x -= 1; }
+		if(this.isPressed('d') || this.isPressed('D') || this.isPressed('ArrowRight')){ this.dir.x += 1; }
 	};
 	
 	Keyboard.keyup = function(e) {
@@ -33,10 +32,10 @@ define(function () {
 		this.dir.x = 0;
 		this.dir.y = 0;
 		
-		if(this.isPressed('w') || this.isPressed('ArrowUp')){ this.dir.y -= 1; } 
-		if(this.isPressed('s') || this.isPressed('ArrowDown')){ this.dir.y += 1; }
-		if(this.isPressed('a') || this.isPressed('ArrowLeft')){ this.dir.x -= 1; }
-		if(this.isPressed('d') || this.isPressed('ArrowRight')){ this.dir.x += 1; }
+		if(this.isPressed('w') || this.isPressed('W') || this.isPressed('ArrowUp')){ this.dir.y -= 1; } 
+		if(this.isPressed('s') || this.isPressed('S') || this.isPressed('ArrowDown')){ this.dir.y += 1; }
+		if(this.isPressed('a') || this.isPressed('A') || this.isPressed('ArrowLeft')){ this.dir.x -= 1; }
+		if(this.isPressed('d') || this.isPressed('D') || this.isPressed('ArrowRight')){ this.dir.x += 1; }
 	};
 	   
 	Keyboard.isPressed = function(key){

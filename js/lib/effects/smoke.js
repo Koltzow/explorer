@@ -30,7 +30,10 @@ Smoke.update = function () {
 	    this.particles[i].l--;
 	    this.particles[i].r += Math.random();
 	    this.particles[i].y += 0.5;
-	    this.particles[i].c = 'rgba(255, 255, 255, '+(1/this.l * this.particles[i].l)+')';
+	    
+	    var l = (1/this.l * this.particles[i].l);
+	    	    
+	    this.particles[i].c = 'rgba('+Math.round(255*l)+', '+Math.round(255*l)+', '+Math.round(255*l)+', '+l+')';
 	    
 	    if(this.particles[i].l < 0){
 	    	this.particles.splice(i, 1);

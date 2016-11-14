@@ -10,8 +10,10 @@ define(function () {
 		
 		item.x = params.x || 0;
 		item.y = params.y || 0;
+		item.type = 'object';
 		item.label = 'health';
-		item.active = true;
+		item.collided = false;
+		item.colliding = false;
 		item.width = params.width || 32;
 		item.height = params.height || 32;
 		item.collider = {
@@ -54,7 +56,7 @@ define(function () {
 		      			
 			EXP.engine.ctx.drawImage(this.tilesheet, (this.currentAnimation.x+Math.floor(this.currentAnimationFrame))*this.width, this.currentAnimation.y*this.height, this.width, this.height, Math.round(this.x + EXP.engine.width/2 - this.width/2 - EXP.camera.x), Math.round(this.y + EXP.engine.height/2 - this.height/2 - EXP.camera.y), this.width, this.height);
 			
-			if(EXP.debug.showCollider){
+			if(EXP.debug.colliders){
 			
 				EXP.engine.ctx.fillStyle = 'rgba(0,255,0,0.5)';
 				EXP.engine.ctx.fillRect(
@@ -66,14 +68,14 @@ define(function () {
 			}
 		};
 		
-		item.activate = function (obj) {
-			
-			if(obj.health !== undefined && this.active){
-			
+		item.onCollisionEnter = function (obj) {
+		
+			if(!this.collided){
+				
 				EXP.sound.play('health');
 				
 				for (var i = 0; i < 5; i++) {
-									
+										
 					setTimeout(function () {
 										
 						EXP.effects.exp.add(obj.x, obj.y-16, '+');
@@ -87,10 +89,17 @@ define(function () {
 				obj.health += this.boost;
 				obj.health = (obj.health > obj.maxHealth)?obj.maxHealth:obj.health;
 			}
-			
-			delete this;
+		
+			this.collided = true;
+			this.colliding = true;
 			
 		};
+		
+		item.onCollisionExit = function (obj) {
+			this.colliding = false;
+		};
+		
+		item.onCollisionStay = function (obj) {};
 		
 		return item;
 		
